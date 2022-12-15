@@ -1,0 +1,121 @@
+drop database microprestamos
+create database microprestamos10
+
+use microprestamos10
+
+Create table usuarios_finales(
+Id_usuario int identity (1,1) primary key not null,
+cedula varchar(15) ,
+Nombre_completo varchar(100),
+Usuario varchar(50),
+Sexo varchar(1),
+Fecha_nacimiento date ,
+Contraseña varchar(100),
+Email varchar (100),
+Estatus varchar(50),
+Id_rol int 
+)
+
+
+Create table roles (
+Id_rol int identity (1,1) primary key not null,
+Descripcion varchar(100) ,
+Estatus varchar(50) 
+)
+
+Create table prestamos(
+Id_prestamos int identity (1,1)primary key ,
+Monto numeric(7,2) ,
+Balance_Restante numeric (7,2),
+Fecha_aprobación date ,
+Periodo int ,
+Monto_cuota numeric(7,2) ,
+Tipo_De_tasa varchar(100),
+Fecha_desembolso date ,
+Id_usuario int ,
+Id_tipo_de_prestamos int  ,
+Id_Tipo_de_interés int ,
+Descripción varchar(100),
+Estatus varchar(1)
+)
+
+
+
+Create table tipo_de_prestamos(
+Id_tipo_de_prestamos int identity (1,1) primary key not null,
+Descripcion varchar(100),
+Estatus varchar(50)
+)
+
+Create table abono(
+Id_abono int identity (1,1) primary key not null,
+Fecha_de_abono date , 
+Monto_abonado numeric(7,2) ,
+/*Total_abonado numeric(7,2) ,*/
+porcentaje_de_interes numeric(7,2) ,
+/*Balance_restante numeric(7,2) ,*/
+Estatus varchar(50),
+/*Id_usuario int ,*/
+Id_prestamos int 
+)
+
+
+
+Create table Tipo_de_interés(
+Id_Tipo_de_interés int identity (1,1) primary key not null,
+Descripción varchar(100),
+Estatus varchar(50)
+)
+
+
+/*Create table pagos(
+Id_pago int identity (1,1) primary key not null,
+Fecha_de_pago date ,
+Total_pagado numeric(7,2),
+porcentaje_de_interes numeric(7,2),
+Balance_restante numeric(7,2),
+Estatus varchar(50),
+Id_usuario int  ,
+Id_prestamos int 
+)*/
+
+Alter table usuarios_finales add foreign key (Id_rol) references roles(Id_rol)
+Alter table prestamos add foreign key (Id_usuario) references usuarios_finales(Id_usuario)
+Alter table prestamos add foreign key (Id_tipo_de_prestamos) references tipo_de_prestamos(Id_tipo_de_prestamos)
+Alter table prestamos add foreign key (Id_Tipo_de_interés) references Tipo_de_interés(Id_Tipo_de_interés)
+/*Alter table abono add foreign key (Id_usuario) references usuarios_finales(Id_usuario)*/
+Alter table abono add foreign key (Id_prestamos) references prestamos(Id_prestamos)
+/*Alter table pagos add foreign key (Id_usuario) references usuarios_finales(Id_usuario)*/
+/*Alter table pagos add foreign key (Id_prestamos) references prestamos(Id_prestamos)*/
+
+select * from roles
+select * from usuarios_finales
+select * from prestamos
+select * from abono
+
+
+
+select * from Tipo_de_interés
+Insert into Tipo_de_interés (Descripción, Estatus) values('Tasa de interes fija', 'A')
+
+select * from tipo_de_prestamos
+Insert into tipo_de_prestamos (Descripcion, Estatus) values('Personal', 'A')
+Insert into tipo_de_prestamos (Descripcion, Estatus) values('Hipotecario', 'A')
+Insert into tipo_de_prestamos (Descripcion, Estatus) values('Empresarial', 'A')
+Insert into tipo_de_prestamos (Descripcion, Estatus) values('Vehiculo', 'A')
+
+Insert into roles (Descripcion, Estatus) values('Administrador', 'A')
+Insert into roles (Descripcion, Estatus) values('Cliente', 'A')
+
+Insert into usuarios_finales (cedula, Nombre_completo, Usuario,Sexo,Fecha_nacimiento, Contraseña,Email, Estatus,id_rol) values('402-35986148','Jesus De la cruz', 'Jesus_leonardo','M','1998-10-10','j1234','jj@gmail.com','A',1)
+
+Insert into prestamos (Monto,Balance_Restante, Fecha_aprobación,Periodo, Monto_cuota, Tipo_De_tasa, Fecha_desembolso, Descripción,Estatus) values(2000,2000,'2022-10-09',1,500,'Fija','2021-11-05','Prestamo Hipotecario','A')
+
+/*Insert into pagos(Fecha_de_pago,Total_pagado,porcentaje_de_interes, Balance_restante,Estatus) VALUES ('2022-10-09',250,60,125,'A')*/
+
+Insert into abono (Fecha_de_abono,Monto_abonado,porcentaje_de_interes, Estatus) Values ('2022-05-05',500,10,'A')
+
+/*update prestamos set Balance_Restante = Balance_Restante - Monto_abonado[cuadro de texto a insertar]  Where [Id_prestamos]=1; Insert into abono (Monto_abonado) values (@Monto_abonado) */
+
+
+
